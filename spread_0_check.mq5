@@ -18,27 +18,31 @@ void checkALLSymbols() {
    captureAllSymbol=false;
    
    totalNumberOfSymbols = SymbolsTotal(captureAllSymbol);
-   Print("Total Number Of Symbols = " ,totalNumberOfSymbols);
+   //Print("Total Number Of Symbols = " ,totalNumberOfSymbols);
    
    //Loop All Symbols
-   Print("---Loop All Symbols---");
-   for(intSymbolCounter=0; intSymbolCounter<totalNumberOfSymbols; intSymbolCounter++)
+   //Print("---Loop All Symbols---");
+   // Just Using Admin Orders to Check Specific Symbol
+   for(intSymbolCounter=38; intSymbolCounter<totalNumberOfSymbols; intSymbolCounter++)
    {
    //Resize Array
    ArrayResize(SymbolArray,intSymbolCounter+1);
    SymbolArray[intSymbolCounter] = SymbolName(intSymbolCounter, captureAllSymbol);
-   //Print("Why Not Write")
-   // int file_handle = FileOpen(FILESFolderPath2+"\\"+fileName, FILE_READ|FILE_WRITE|FILE_CSV);
  
-   Print("Start To Write" + SymbolArray[intSymbolCounter]);
-   Print("Symbol","  ", "Spread");
-   Print( SymbolArray[intSymbolCounter],"  ",SymbolInfoInteger(SymbolArray[intSymbolCounter], SYMBOL_SPREAD));
-   if(SymbolInfoInteger(SymbolArray[intSymbolCounter],SYMBOL_SPREAD) == 0)
+   //Print("Symbol","  ", "Spread");
+   //Print( SymbolArray[intSymbolCounter],"  ",SymbolInfoInteger(SymbolArray[intSymbolCounter], SYMBOL_SPREAD));
+   
+   if(SymbolInfoInteger(SymbolArray[intSymbolCounter],SYMBOL_SPREAD) <= 10)
    {
-      Print("---Go---Go---Go---Go---");
-      Alert(SymbolArray[intSymbolCounter], " is match 0 now");
+      Alert(SymbolArray[intSymbolCounter], " is lower than  10 now");
+      SendMail("CFD Spread is Lower Than 10 now", "This Symbol is lower than 10 = " + SymbolArray[intSymbolCounter]);
    }
    
+   if(SymbolInfoInteger(SymbolArray[intSymbolCounter],SYMBOL_SPREAD) == 0)
+   {
+      Alert(SymbolArray[intSymbolCounter], " is match 0 now");
+      SendMail("CFD Spread is match 0 now!!!", "This Symbol is equal to 0 = " + SymbolArray[intSymbolCounter]);
+   }
    Print(intSymbolCounter, " symbol name ", SymbolArray[intSymbolCounter]);
    
    }
@@ -55,6 +59,7 @@ void checkALLSymbols() {
 int OnInit()
   {
 //---
+ //checkALLSymbols();
  OnTick();
 //---
    return(INIT_SUCCEEDED);
@@ -76,3 +81,4 @@ void OnTick()
    checkALLSymbols();
   }
 //+------------------------------------------------------------------+
+
